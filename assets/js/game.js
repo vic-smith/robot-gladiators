@@ -39,17 +39,24 @@ var fightOrSkip = function() {
 
 // fight function (now with parameter for enemy's name).
 var fight = function(enemy) {
+    // keep track of who goes first
+        var isPlayerTurn = true;
+    // randomly change turn order
+    if (Math.random() > 0.5) {
+            isPlayerTurn = false;
+        } 
+
     while(enemy.health > 0 && enemy.health > 0) {
+        if (isPlayerTurn) {
         //ask player if they'd like to fight or run
         if (fightOrSkip()) {
             // if true, leave fight by breaking loop
             break;
         }
-    };
     
     // generate random damage value based on player's attack power
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-
+    // remove enemy's health by subtracting the amount we set in the damage variable  
     enemy.health = Math.max(0, enemy.health - damage);
     console.log(
         playerInfo.name + 'attacked' + enemy.name + '. ' + enemy.name + ' now has ' + enemy.health + 'health remaining.'
@@ -63,11 +70,12 @@ var fight = function(enemy) {
       playerInfo.money = playerInfo.money + 20
 
       // leave while() loop since enemy is dead
-      //break;
+      break;
     } else {
       window.alert(enemy.name + " still has " + enemy.health + " health left.");
     }
-
+    // player gets attacked first
+   }else{
       // remove player's health by subtracting the amount set in the enemy.attack variable
       var damage =  randomNumber(enemy.attack - 3, enemy.attack);
 
@@ -86,6 +94,9 @@ var fight = function(enemy) {
     window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
     }
 }
+    // switch turn order for next round
+    isPlayerTurn = !isPlayerTurn;
+  }
 };
 
 
@@ -156,21 +167,20 @@ var endGame = function(){
 var shop = function(){
     //ask player what they'd like to do 
     var shopOptionPrompt = window.prompt(
-        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one 1 for REFILL, 2 for UPGRADE, or 3 for LEAVE."
     );
 
     // use switch to carry out action
+    shopOptionPrompt = parseInt(shopOptionPrompt);
     switch (shopOptionPrompt) {
-        case "REFILL":
-        case "refill":
+        case 1:
          playerInfo.refillHealth();
             break;
-        case "UPGRADE":
-        case "upgrade":
+        case 2:
          playerInfo.upgradeAttack();
             break;
-        case "LEAVE":
-        case "leave":
+        
+        case 3:
             window.alert("Leaving the store.");
             
             // do nothing, so functions will end
